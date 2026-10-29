@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physical to Digital Crypto Scanner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        
+        /* Logo and Header Styling */
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        /* Logo styling */
+        .site-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #00adb5;
+            margin: 0 0 5px 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background-color: #252830;
+            color: #00adb5;
+            font-size: 15px;
+        }
+        tr:hover {
+            background-color: #2a2e3d;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .oversold {
+            background-color: #28a745;
+            color: white;
+        }
+        .overbought {
+            background-color: #dc3545;
+            color: white;
+        }
+        .neutral {
+            background-color: #6c757d;
+            color: white;
+        }
+        .bullish {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .bearish {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .refresh-btn {
+            display: block;
+            width: 200px;
+            margin: 25px auto 0 auto;
+            padding: 12px;
+            background-color: #00adb5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        .refresh-btn:hover {
+            background-color: #008f95;
+        }
+        .loading {
+            text-align: center;
+            color: #f39c12;
+            margin-top: 30px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-container">
+        <!-- Digital Logo: A circuit board Bitcoin symbol -->
+        <svg class="site-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" stroke="#00ADB5" stroke-width="4"/>
+            <path d="M72.9357 41.7222C74.6738 41.7222 76.1011 40.2949 76.1011 38.5568C76.1011 36.8187 74.6738 35.3914 72.9357 35.3914C71.1977 35.3914 69.7704 36.8187 69.7704 38.5568C69.7704 40.2949 71.1977 41.7222 72.9357 41.7222Z" fill="#00ADB5"/>
+            <path d="M42.8466 38.0494V26H46.5058V38.0494H54.0815V26H57.7408V38.0494C61.4278 38.0494 64.636 40.6974 65.6599 44.2494C66.7118 47.9015 65.3197 51.9056 62.1311 53.7663C65.3197 55.6269 66.7118 59.6311 65.6599 63.2831C64.636 66.8352 61.4278 69.4832 57.7408 69.4832V81.5326H54.0815V69.4832H46.5058V81.5326H42.8466V69.4832C39.1595 69.4832 35.9513 66.8352 34.9274 63.2831C33.8755 59.6311 35.2676 55.6269 38.4562 53.7663C35.2676 51.9056 33.8755 47.9015 34.9274 44.2494C35.9513 40.6974 39.1595 38.0494 42.8466 38.0494ZM42.8466 41.7087C40.6723 41.7087 38.9038 43.4771 38.9038 45.6515V61.881C38.9038 64.0553 40.6723 65.8238 42.8466 65.8238C45.0209 65.8238 46.7894 64.0553 46.7894 61.881V45.6515C46.7894 43.4771 45.0209 41.7087 42.8466 41.7087ZM54.0815 41.7087C51.9072 41.7087 50.1387 43.4771 50.1387 45.6515V61.881C50.1387 64.0553 51.9072 65.8238 54.0815 65.8238C56.2558 65.8238 58.0243 64.0553 58.0243 61.881V45.6515C58.0243 43.4771 56.2558 41.7087 54.0815 41.7087Z" fill="#00ADB5"/>
+        </svg>
+        
+        <h1>Physical to Digital Crypto Scanner</h1>
+        <div class="subtitle">Live RSI & Moving Average Trend Scanner (Free Binance Data)</div>
+    </div>
+    
+    <div id="loadingStatus" class="loading">Analyzing live crypto market... Please wait.</div>
+
+    <table id="scannerTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Coin Pair</th>
+                <th>Price (USDT)</th>
+                <th>RSI (14)</th>
+                <th>RSI Signal</th>
+                <th>Trend (EMA 20/50)</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Market data dynamically added here -->
+        </tbody>
+    </table>
+
+    <button class="refresh-btn" onclick="loadMarketData()">Refresh Scanner</button>
+</div>
+
+<script>
+    // List of Top 10 Crypto pairs to scan
+    const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'ADAUSDT', 'XRPUSDT', 'AVAXUSDT', 'LINKUSDT', 'DOTUSDT', 'NEARUSDT'];
+
+    // Function to calculate Relative Strength Index (RSI)
+    function calculateRSI(closes, period = 14) {
+        if (closes.length < period + 1) return 50;
+        let gains = 0;
+        let losses = 0;
+
+        for (let i = closes.length - period; i < closes.length; i++) {
+            let change = closes[i] - closes[i - 1];
+            if (change > 0) gains += change;
+            else losses -= change;
+        }
+
+        let avgGain = gains / period;
+        let avgLoss = losses / period;
+
+        if (avgLoss === 0) return 100;
+        let rs = avgGain / avgLoss;
+        return 100 - (100 / (1 + rs));
+    }
+
+    // Function to calculate Exponential Moving Average (EMA)
+    function calculateEMA(closes, period) {
+        if (closes.length < period) return closes[closes.length - 1];
+        let k = 2 / (period + 1);
+        let ema = closes[0];
+        for (let i = 1; i < closes.length; i++) {
+            ema = (closes[i] * k) + (ema * (1 - k));
+        }
+        return ema;
+    }
+
+    // Fetch historical data (Klines/Candlesticks) from Binance
+    async function fetchKlines(symbol) {
+        try {
+            // Fetching last 100 hourly candles
+            const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=100`);
+            const data = await response.json();
+            // Extract closing prices (index 4 in Binance response)
+            return data.map(candle => parseFloat(candle[4]));
+        } catch (error) {
+            console.error(`Error fetching data for ${symbol}:`, error);
+            return [];
+        }
+    }
+
+    // Main function to fetch all data, calculate indicators, and display
+    async function loadMarketData() {
+        const tableBody = document.getElementById('tableBody');
+        const loadingStatus = document.getElementById('loadingStatus');
+        const scannerTable = document.getElementById('scannerTable');
+        
+        // Show loading, hide table
+        loadingStatus.style.display = 'block';
+        scannerTable.style.display = 'none';
+        tableBody.innerHTML = ''; // Clear old data
+
+        for (let symbol of symbols) {
+            const closes = await fetchKlines(symbol);
+            if (closes.length > 50) { // Ensure we have enough data for EMA 50
+                const currentPrice = closes[closes.length - 1];
+                const rsi = calculateRSI(closes, 14);
+                const ema20 = calculateEMA(closes, 20);
+                const ema50 = calculateEMA(closes, 50);
+
+                // Determine RSI Status
+                let rsiClass = 'neutral';
+                let rsiText = 'Neutral';
+                if (rsi < 30) {
+                    rsiClass = 'oversold';
+                    rsiText = 'Oversold (<30)';
+                } else if (rsi > 70) {
+                    rsiClass = 'overbought';
+                    rsiText = 'Overbought (>70)';
+                }
+
+                // Determine Trend Status (Golden/Death Cross logic)
+                let trendText = ema20 > ema50 ? 'BULLISH' : 'BEARISH';
+                let trendClass = ema20 > ema50 ? 'bullish' : 'bearish';
+
+                // Format price to handle small decimal values
+                const formattedPrice = currentPrice >= 1 ? currentPrice.toFixed(2) : currentPrice.toFixed(6);
+
+                // Construct Table Row
+                const row = `<tr>
+                    <td><strong>${symbol.replace('USDT', '')}/USDT</strong></td>
+                    <td>$${formattedPrice}</td>
+                    <td>${rsi.toFixed(2)}</td>
+                    <td><span class="badge ${rsiClass}">${rsiText}</span></td>
+                    <td><span class="${trendClass}">${trendText}</span></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            }
+        }
+
+        // Hide loading, show table with data
+        loadingStatus.style.display = 'none';
+        scannerTable.style.display = 'table';
+    }
+
+    // Initial load on page start
+    loadMarketData();
+</script>
+
+</body>
+</html>

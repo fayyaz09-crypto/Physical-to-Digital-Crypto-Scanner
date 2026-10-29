@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Physical to Digital Crypto Scanner</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0b0e14;
@@ -13,7 +16,7 @@
             padding: 0;
         }
 
-        /* Navigation Bar */
+        /* Top Navigation Bar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -29,6 +32,7 @@
             font-weight: bold;
             color: #fff;
             text-decoration: none;
+            font-size: 16px;
         }
         .nav-links {
             display: flex;
@@ -36,6 +40,7 @@
             gap: 25px;
             margin: 0;
             padding: 0;
+            align-items: center;
         }
         .nav-links a {
             color: #a0aec0;
@@ -67,7 +72,7 @@
             border: 1px solid #1e232d;
         }
 
-        /* Hero Banner */
+        /* Hero Banner with Logo */
         .hero-banner {
             display: flex;
             align-items: center;
@@ -81,6 +86,7 @@
             margin: 0;
             color: #ffffff;
             font-size: 26px;
+            letter-spacing: 1px;
         }
         .hero-title h1 span {
             color: #00ff88;
@@ -90,6 +96,7 @@
             color: #2979ff;
             font-size: 13px;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         /* Table Styling */
@@ -107,18 +114,19 @@
             background-color: #1a202c;
             color: #2979ff;
             font-size: 14px;
+            text-transform: uppercase;
         }
         tr:hover {
             background-color: #1a2233;
         }
 
-        /* TradingView Direct Clickable Link */
+        /* Clickable TradingView Row Button */
         a.coin-link {
             color: #00ff88 !important;
             text-decoration: none !important;
             font-weight: bold;
             display: inline-block;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border: 1px solid #00ff88;
             border-radius: 6px;
             background-color: rgba(0, 255, 136, 0.1);
@@ -131,12 +139,13 @@
             box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
         }
 
-        /* Badges */
+        /* Indicator Badges */
         .badge {
             padding: 6px 12px;
             border-radius: 4px;
             font-weight: bold;
             font-size: 12px;
+            text-transform: uppercase;
         }
         .oversold { background-color: #00ff88; color: #000; }
         .overbought { background-color: #ff3366; color: #fff; }
@@ -156,9 +165,13 @@
             font-size: 15px;
             cursor: pointer;
             font-weight: bold;
+            transition: opacity 0.3s;
+        }
+        .refresh-btn:hover {
+            opacity: 0.9;
         }
 
-        /* Indicators Section */
+        /* Indicators Detailed Section */
         .indicators-section {
             display: none;
             margin-top: 20px;
@@ -188,12 +201,12 @@
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Header Navigation -->
     <nav class="navbar">
         <a href="#" class="nav-logo" onclick="showSection('scanner')">
-            <svg width="30" height="30" viewBox="0 0 100 100">
+            <svg width="30" height="30" viewBox="0 0 100 100" fill="none">
                 <circle cx="50" cy="50" r="45" stroke="#2979FF" stroke-width="6" fill="#131722"/>
-                <path d="M30 65 L45 45 L55 55 L72 32" stroke="#00FF88" stroke-width="6"/>
+                <path d="M30 65 L45 45 L55 55 L72 32" stroke="#00FF88" stroke-width="6" stroke-linecap="round"/>
             </svg>
             PHYSICAL TO DIGITAL
         </a>
@@ -206,13 +219,17 @@
     </nav>
 
     <div class="container">
-        <!-- Banner Logo -->
+        <!-- Hero Logo & Title Banner -->
         <div class="hero-banner">
-            <svg width="70" height="70" viewBox="0 0 100 100">
+            <svg width="70" height="70" viewBox="0 0 100 100" fill="none">
                 <circle cx="50" cy="50" r="45" stroke="#2979FF" stroke-width="4" fill="#131722"/>
                 <circle cx="50" cy="50" r="36" stroke="#00FF88" stroke-width="2" stroke-dasharray="6 4"/>
-                <path d="M30 65 L45 45 L55 55 L72 32" stroke="#00FF88" stroke-width="4" stroke-linecap="round"/>
-                <path d="M62 32 H72 V42" stroke="#00FF88" stroke-width="4" stroke-linecap="round"/>
+                <path d="M30 65 L45 45 L55 55 L72 32" stroke="#00FF88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M62 32 H72 V42" stroke="#00FF88" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="30" cy="65" r="3" fill="#2979FF"/>
+                <circle cx="45" cy="45" r="3" fill="#2979FF"/>
+                <circle cx="55" cy="55" r="3" fill="#2979FF"/>
+                <circle cx="72" cy="32" r="3" fill="#00FF88"/>
             </svg>
             <div class="hero-title">
                 <h1>PHYSICAL TO DIGITAL <span>CRYPTO SCANNER</span></h1>
@@ -220,9 +237,9 @@
             </div>
         </div>
 
-        <!-- Scanner Section -->
+        <!-- Scanner Market Section -->
         <div id="scannerSection">
-            <div id="loadingStatus" style="text-align: center; color: #00ff88;">Scanning Binance Spot Pairs... Please wait.</div>
+            <div id="loadingStatus" style="text-align: center; color: #00ff88; font-size: 16px;">Scanning Binance Spot Market Data... Please wait.</div>
             <table id="scannerTable" style="display: none;">
                 <thead>
                     <tr>
@@ -240,26 +257,122 @@
 
         <!-- Indicators Detailed Section -->
         <div id="indicatorsSection" class="indicators-section">
-            <h2 style="color: #00ff88; text-align: center;">Technical Indicators Guide</h2>
+            <h2 style="color: #00ff88; text-align: center; margin-bottom: 25px;">Technical Indicators Guide</h2>
             <div class="indicators-grid">
                 <div class="indicator-card">
                     <h3>RSI (Relative Strength Index)</h3>
-                    <p>Measures momentum. RSI &lt; 30 indicates Oversold (Buy signal), while RSI &gt; 70 indicates Overbought (Sell signal).</p>
+                    <p>Measures price momentum. An RSI below 30 indicates an Oversold market (Potential Buy), while above 70 indicates Overbought (Potential Sell).</p>
                 </div>
                 <div class="indicator-card">
                     <h3>EMA (Exponential Moving Average)</h3>
-                    <p>Tracks price trend. When EMA 20 crosses above EMA 50, it triggers a Bullish trend. Below means Bearish.</p>
+                    <p>Tracks current market trend. When EMA 20 moves above EMA 50, it signifies a Bullish trend. Otherwise, it shows a Bearish trend.</p>
                 </div>
                 <div class="indicator-card">
                     <h3>MACD (Moving Average Convergence Divergence)</h3>
-                    <p>Shows relationship between two moving averages. Used to spot trend changes and momentum shifts.</p>
+                    <p>Displays momentum direction and trend strength by calculating the relationship between two exponential moving averages.</p>
                 </div>
                 <div class="indicator-card">
                     <h3>Bollinger Bands</h3>
-                    <p>Measures market volatility. Touching the lower band signals oversold; upper band signals overbought.</p>
+                    <p>Measures market volatility. Touching the lower band signals an oversold condition, while touching the upper band signals overbought.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        const symbols = [
+            'BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 
+            'ADAUSDT', 'AVAXUSDT', 'DOGEUSDT', 'DOTUSDT', 'LINKUSDT', 
+            'NEARUSDT', 'MATICUSDT', 'LTCUSDT', 'SHIBUSDT', 'ATOMUSDT'
+        ];
+
+        function showSection(section) {
+            if(section === 'indicators') {
+                document.getElementById('scannerSection').style.display = 'none';
+                document.getElementById('indicatorsSection').style.display = 'block';
+                document.getElementById('nav-indicators').classList.add('active');
+                document.getElementById('nav-scanner').classList.remove('active');
+            } else {
+                document.getElementById('scannerSection').style.display = 'block';
+                document.getElementById('indicatorsSection').style.display = 'none';
+                document.getElementById('nav-scanner').classList.add('active');
+                document.getElementById('nav-indicators').classList.remove('active');
+            }
+        }
+
+        function calculateRSI(closes, period = 14) {
+            if (closes.length < period + 1) return 50;
+            let gains = 0, losses = 0;
+            for (let i = closes.length - period; i < closes.length; i++) {
+                let change = closes[i] - closes[i - 1];
+                if (change > 0) gains += change;
+                else losses -= change;
+            }
+            let avgGain = gains / period, avgLoss = losses / period;
+            if (avgLoss === 0) return 100;
+            return 100 - (100 / (1 + (avgGain / avgLoss)));
+        }
+
+        function calculateEMA(closes, period) {
+            if (closes.length < period) return closes[closes.length - 1];
+            let k = 2 / (period + 1), ema = closes[0];
+            for (let i = 1; i < closes.length; i++) {
+                ema = (closes[i] * k) + (ema * (1 - k));
+            }
+            return ema;
+        }
+
+        async function fetchKlines(symbol) {
+            try {
+                const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=100`);
+                const data = await response.json();
+                return data.map(candle => parseFloat(candle[4]));
+            } catch (error) { return []; }
+        }
+
+        async function loadMarketData() {
+            const tableBody = document.getElementById('tableBody');
+            const loadingStatus = document.getElementById('loadingStatus');
+            const scannerTable = document.getElementById('scannerTable');
+            
+            loadingStatus.style.display = 'block';
+            scannerTable.style.display = 'none';
+            tableBody.innerHTML = '';
+
+            for (let symbol of symbols) {
+                const closes = await fetchKlines(symbol);
+                if (closes.length > 50) {
+                    const currentPrice = closes[closes.length - 1];
+                    const rsi = calculateRSI(closes, 14);
+                    const ema20 = calculateEMA(closes, 20);
+                    const ema50 = calculateEMA(closes, 50);
+
+                    let rsiClass = 'neutral', rsiText = 'Neutral';
+                    if (rsi < 30) { rsiClass = 'oversold'; rsiText = 'Oversold (<30)'; }
+                    else if (rsi > 70) { rsiClass = 'overbought'; rsiText = 'Overbought (>70)'; }
+
+                    let trendText = ema20 > ema50 ? 'BULLISH' : 'BEARISH';
+                    let trendClass = ema20 > ema50 ? 'bullish' : 'bearish';
+
+                    const row = `<tr>
+                        <td>
+                            <a href="https://www.tradingview.com/chart/?symbol=BINANCE:${symbol}" target="_blank" rel="noopener noreferrer" class="coin-link">
+                                📈 ${symbol.replace('USDT', '')}/USDT
+                            </a>
+                        </td>
+                        <td>$${currentPrice >= 1 ? currentPrice.toFixed(2) : currentPrice.toFixed(6)}</td>
+                        <td>${rsi.toFixed(2)}</td>
+                        <td><span class="badge ${rsiClass}">${rsiText}</span></td>
+                        <td><span class="${trendClass}">${trendText}</span></td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                }
+            }
+            loadingStatus.style.display = 'none';
+            scannerTable.style.display = 'table';
+        }
+
+        loadMarketData();
+    </script>
+</body>
+</html>
